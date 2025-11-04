@@ -20,7 +20,9 @@ FetchContent_MakeAvailable(glad)
 
 add_executable(${PROJECT_NAME} main.cpp
         Vector.cpp
-        Vector.h)
+        Vector.h
+        Matrix4x4.h
+        Matrix4x4.cpp)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw glad)
 
