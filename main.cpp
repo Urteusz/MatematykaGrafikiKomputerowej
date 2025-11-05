@@ -74,12 +74,54 @@ int main() {
     Matrix4x4 M_Trans; // Tworzymy macierz translacji
     M_Trans.SetTranslationPart(Vector(5, 6, 7));
 
-    Matrix4x4 M_Result = M_Trans * M_I; // Mnożymy przez jednostkową
+    cout << "--- Test 4: Przemiennosc mnozenia prostych macierzy ---" << endl;
 
-    printMatrix("Test 4: Macierz Translacji (M_Trans)", M_Trans);
-    printMatrix("Wynik M_Trans * I (powinien byc identyczny)", M_Result);
+    Matrix4x4 M1(
+            1, 2, 3, 4,
+            5, 6, 7, 8,
+            9, 10, 11, 12,
+            13, 14, 15, 16);
+
+    Matrix4x4 M2(
+            2, 0, 1, 3,
+            1, 2, 0, 1,
+            3, 1, 2, 0,
+            0, 3, 1, 2);
+
+    Matrix4x4 M1M2 = M1 * M2;
+    Matrix4x4 M2M1 = M2 * M1;
+
+    printMatrix("M1 * M2", M1M2);
+    printMatrix("M2 * M1", M2M1);
+
+    if (M1M2 == M2M1)
+        cout << "Mnozenie macierzy jest przemienne (blad)" << endl;
+    else
+        cout << "Mnozenie macierzy NIE jest przemienne (poprawnie)" << endl;
+
     cout << endl;
 
+    Matrix4x4 M_T(
+            1, 2, 3, 4,
+            5, 6, 7, 8,
+            9, 10, 11, 12,
+            13, 14, 15, 16);
+
+    printMatrix("Macierz oryginalna", M_T);
+
+    Matrix4x4 M_Tt = M_T.GetTransposed();
+    printMatrix("Macierz transponowana", M_Tt);
+
+    Matrix4x4 M_Ttt;
+    M_Ttt.SetTransposed(M_Tt);
+    printMatrix("Ponownie transponowana (powinna byc jak oryginalna)", M_Ttt);
+
+    if (M_T == M_Ttt)
+        cout << "Transpozycja dziala poprawnie (T(T(M)) == M)" << endl;
+    else
+        cout << "Blad transpozycji (T(T(M)) != M)" << endl;
+
+    cout << endl;
 
     // --- ZADANIE 3: Obrót wektora ---
     cout << "--- Zadanie 3: Obracanie wektora [1,0,0] o 90 stopni wokol osi Y ---" << endl;
