@@ -11,12 +11,6 @@
 
 class Matrix4x4 {
 public:
-    // Macierz przechowuje 16 liczb float
-    // Użyjemy układu kolumnowego (Column-Major), standardowego w OpenGL
-    // [ 0  4  8 12 ]
-    // [ 1  5  9 13 ]
-    // [ 2  6 10 14 ]
-    // [ 3  7 11 15 ]
     float entries[16];
 
     // --- Konstruktory ---
@@ -33,6 +27,8 @@ public:
     void LoadIdentity();
 
     // --- Operatory arytmetyczne ---
+    bool operator==(const Matrix4x4& other) const;
+    bool operator!=(const Matrix4x4& other) const;
     Matrix4x4 operator+(const Matrix4x4& mat) const;
     Matrix4x4 operator*(const float f) const;
     Matrix4x4 operator*(const Matrix4x4& mat) const;

@@ -23,60 +23,41 @@ void printMatrix(const char* name, Matrix4x4 m) {
 
 int main() {
 
-//    // 2. Sprawdzenie przemienności dodawania
-//    Vector a(1, 2, 3);
-//    Vector b(4, 5, 6);
-//    Vector sum1 = a;
-//    sum1.add(b);
-//    Vector sum2 = b;
-//    sum2.add(a);
-//
-//    cout << "Przemiennosc dodawania: "
-//         << ((sum1.x == sum2.x && sum1.y == sum2.y && sum1.z == sum2.z) ? "TAK" : "NIE")
-//         << endl;
-//
-//    // 3. Kąt między [0,3,0] a [5,5,0]
-//    Vector v1(0, 3, 0);
-//    Vector v2(5, 5, 0);
-//    float dot = v1.dotProduct(v2);
-//    float len1 = v1.length();
-//    float len2 = v2.length();
-//    float angle = acos(dot / (len1 * len2)); // w radianach
-//    cout << "Kat miedzy wektorami: " << angle * 180 / M_PI << " stopni" << endl;
-//
-//    // 4. Wektor prostopadły do [4,5,1] i [4,1,3]
-//    Vector v3(4, 5, 1);
-//    Vector v4(4, 1, 3);
-//    Vector cross = v3.cross(v4);
-//    cout << "Wektor prostopadly: [" << cross.x << ", " << cross.y << ", " << cross.z << "]" << endl;
-//
-//    // 5. Normalizacja tego wektora
-//    cross.normalize();
-//    cout << "Znormalizowany wektor: [" << cross.x << ", " << cross.y << ", " << cross.z << "]" << endl;
-//    cout << "Wektor zostalW "
-//         << (cross.length() == 1.f ? "eobrze znormalizowany" : "zle znormalizowany")
-//         << endl;
-
     // Test 1: LoadIdentity()
     Matrix4x4 M_I;
     M_I.LoadIdentity();
     printMatrix("Test 1: Macierz Jednostkowa (I)", M_I);
 
     // Test 2: Dodawanie (A + B)
-    Matrix4x4 M_A; // Domyślnie jednostkowa
-    // Macierz B (wszystkie elementy = 2.0f)
+    Matrix4x4 M_A(1.0f, 1.0f, 1.0f, 1.0f,
+                  1.0f, 1.0f, 1.0f, 1.0f,
+                  1.0f, 1.0f, 1.0f, 1.0f,
+                  1.0f, 1.0f, 1.0f, 1.0f);
+
     Matrix4x4 M_B(2.0f, 2.0f, 2.0f, 2.0f,
                   2.0f, 2.0f, 2.0f, 2.0f,
                   2.0f, 2.0f, 2.0f, 2.0f,
                   2.0f, 2.0f, 2.0f, 2.0f);
 
     Matrix4x4 M_C = M_A + M_B;
-    printMatrix("Test 2: Dodawanie (A = I, B = 2s)", M_B);
-    printMatrix("Wynik A + B (powinny byc 3 na diagonali)", M_C);
+    Matrix4x4 M_D = M_B + M_A;
 
-    // Test 3: Mnożenie przez skalar (B * 3.0)
-    Matrix4x4 M_D = M_B * 3.0f;
-    printMatrix("Test 3: Mnozenie B * 3.0 (powinny byc same 6)", M_D);
+
+    cout << "Test dodawania:" << endl;
+    printMatrix("Dodawanie M_A+M_B", M_C);
+    printMatrix("Dodawanie M_B+M_a", M_D);
+
+    if(M_C == M_D)
+    {
+        cout << "Implementacja dodowania jest przemienne" << endl;
+    }
+    else
+    {
+        cout << "Implementacja dodawnaia nie jest przemienna" << endl;
+    }
+
+    Matrix4x4 M_F = M_B * 3.0f;
+    printMatrix("Test 3: Mnozenie B * 3.0 (powinny byc same 6)", M_F);
 
     // Test 4: Mnożenie Macierz * Macierz (M * I)
     Matrix4x4 M_Trans; // Tworzymy macierz translacji

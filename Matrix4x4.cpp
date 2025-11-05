@@ -42,6 +42,18 @@ void Matrix4x4::LoadIdentity() {
 
 // --- Operatory arytmetyczne ---
 
+bool Matrix4x4::operator==(const Matrix4x4& other) const {
+    for (int i = 0; i < 16; ++i)
+        if (entries[i] != other.entries[i])
+            return false;
+    return true;
+}
+
+bool Matrix4x4::operator!=(const Matrix4x4& other) const {
+    return !(*this == other);
+}
+
+
 Matrix4x4 Matrix4x4::operator+(const Matrix4x4 &mat) const {
     return Matrix4x4(entries[0] + mat.entries[0],
                      entries[1] + mat.entries[1],
