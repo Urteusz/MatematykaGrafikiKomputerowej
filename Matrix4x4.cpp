@@ -202,3 +202,33 @@ Matrix4x4 Matrix4x4::GetTransposed() const {
     result.SetTransposed(*this);
     return result;
 }
+
+void Matrix4x4::setMatrixAsInverseOfGivenMatrix(const Matrix4x4& m) {
+    float t1 = m.entries[0] * m.entries[0];
+    float t2 = m.entries[6] * m.entries[7];
+    float t3 = m.entries[3] * m.entries[1];
+    float t4 = m.entries[8] * m.entries[1];
+    float t5 = m.entries[9] * m.entries[2];
+    float t6 = m.entries[2] * m.entries[2];
+    float det = (t1 - m.entries[8] - t2) * m.entries[5] - t3 * m.entries[7] + t4 * m.entries[5] + t5 * m.entries[7] - t6 * m.entries[4];
+    if (det == 0.0) return;
+    float invd = 1.0f / det;
+    float m0 = (m.entries[4] * m.entries[8] - m.entries[7] * m.entries[5]) * invd;
+    float m3 = -(m.entries[3] * m.entries[8] - m.entries[6] * m.entries[5]) * invd;
+    float m6 = (m.entries[3] * m.entries[7] - m.entries[6] * m.entries[4]) * invd;
+    float m1 = -(m.entries[1] * m.entries[8] - m.entries[7] * m.entries[2]) * invd;
+    float m4 = (m.entries[0] * m.entries[8] - t2 - t4) * invd;
+    float m7 = -(t2 - t4) * invd;
+    float m2 = (m.entries[1] * m.entries[5] - m.entries[4] * m.entries[2]) * invd;
+    float m5 = -(m.entries[0] * m.entries[5] - t3 - t5) * invd;
+    float m8 = 0 - (t1 - t3) * invd;
+    entries[0] = m0; entries[3] = m3; entries[6] = m6;
+    entries[1] = m1; entries[4] = m4; entries[7] = m7;
+    entries[2] = m2; entries[5] = m5; entries[8] = m8;
+}
+
+Matrix4x4 Matrix4x4::getInverseOfMatrix() const {
+    Matrix4x4 result;
+    result.setMatrixAsInverseOfGivenMatrix(*this);
+    return result;
+}
