@@ -15,11 +15,11 @@ Matrix4x4::Matrix4x4() {
 }
 
 Matrix4x4::Matrix4x4(const Matrix4x4 &mat) {
-    memcpy(entries, mat.entries, 16 * sizeof(float)); // [cite: 139]
+    memcpy(entries, mat.entries, 16 * sizeof(float));
 }
 
 Matrix4x4::Matrix4x4(const float* pF) {
-    memcpy(entries, pF, 16 * sizeof(float)); // [cite: 141]
+    memcpy(entries, pF, 16 * sizeof(float));
 }
 
 Matrix4x4::Matrix4x4(float e0, float e1, float e2, float e3,
@@ -67,7 +67,6 @@ Matrix4x4 Matrix4x4::operator+(const Matrix4x4 &mat) const {
 }
 
 Matrix4x4 Matrix4x4::operator*(const float f) const {
-    // Implementacja prosto z PDF
     return Matrix4x4(entries[0] * f,
                      entries[1] * f,
                     entries[2] * f,
@@ -86,14 +85,12 @@ Matrix4x4 Matrix4x4::operator*(const float f) const {
                      entries[15] * f);
 }
 
-// POPRAWNA implementacja mnożenia macierzy (Column-Major)
 Matrix4x4 Matrix4x4::operator*(const Matrix4x4 &mat) const {
     Matrix4x4 result;
-    for (int i = 0; i < 4; ++i) { // Iteruj po kolumnach wynikowych
-        for (int j = 0; j < 4; ++j) { // Iteruj po wierszach wynikowych
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
             float sum = 0.0f;
             for (int k = 0; k < 4; ++k) {
-                // result(j, i) = A(j, k) * B(k, i)
                 sum += entries[j + k * 4] * mat.entries[k + i * 4];
             }
             result.entries[j + i * 4] = sum;
@@ -112,10 +109,8 @@ Vector Matrix4x4::operator*(const Vector &v) const {
     result.y = entries[1] * v.x + entries[5] * v.y + entries[9]  * v.z + entries[13] * w;
     result.z = entries[2] * v.x + entries[6] * v.y + entries[10] * v.z + entries[14] * w;
 
-    // Obliczamy wynikowy komponent 'w' (ważne przy perspektywie)
     float result_w = entries[3] * v.x + entries[7] * v.y + entries[11] * v.z + entries[15] * w;
 
-    // Dzielenie przez 'w' (perspective divide)
     if (result_w != 0.0f && result_w != 1.0f) {
         result.x /= result_w;
         result.y /= result_w;
@@ -126,17 +121,17 @@ Vector Matrix4x4::operator*(const Vector &v) const {
 
 // --- Metody transformacji ---
 
-// Implementacja dla Rotacji wokół Y (potrzebna do zadania)
+// Implementacja dla rotacji wokół Y
 void Matrix4x4::SetRotationY(const double angle) {
-    LoadIdentity(); // [cite: 417]
-    float rad = M_PI * angle / 180.0; // Kąt na radiany
+    LoadIdentity();
+    float rad = M_PI * angle / 180.0;
     entries[0] = (float)cos(rad);
     entries[2] = (float)sin(rad);
     entries[8] = -(float)sin(rad);
     entries[10] = (float)cos(rad);
 }
 
-// Implementacje dla X i Z (dla kompletności, skopiowane z PDF)
+// Implementacje dla rotacji wokół X
 void Matrix4x4::SetRotationX(const double angle) {
     LoadIdentity(); // [cite: 411]
     float rad = M_PI * angle / 180.0;
@@ -146,6 +141,7 @@ void Matrix4x4::SetRotationX(const double angle) {
     entries[10] = entries[5];
 }
 
+// Implementacja dla rotacji wokół Z
 void Matrix4x4::SetRotationZ(const double angle) {
     LoadIdentity(); // [cite: 423]
     float rad = M_PI * angle / 180.0;
@@ -157,7 +153,6 @@ void Matrix4x4::SetRotationZ(const double angle) {
 
 // Inne transformacje
 void Matrix4x4::SetTranslationPart(const Vector &translation) {
-    // Ta metoda zakłada, że macierz jest już ustawiona (np. na jednostkową)
     entries[12] = translation.x;
     entries[13] = translation.y;
     entries[14] = translation.z;
