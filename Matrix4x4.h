@@ -30,6 +30,10 @@ public:
 
     Matrix4x4 GetTransposed() const; //
 
+    void setMatrixAsInverseOfGivenMatrix(const Matrix4x4 &);
+
+    Matrix4x4 getInverseOfMatrix() const;
+
     // --- Operatory arytmetyczne ---
     bool operator==(const Matrix4x4& other) const;
     bool operator!=(const Matrix4x4& other) const;
