@@ -1,7 +1,3 @@
-//
-// Created by igork on 04.11.2025.
-//
-
 #include "Matrix4x4.h"
 
 #ifndef M_PI
@@ -111,10 +107,8 @@ Matrix4x4 Matrix4x4::operator*(const Matrix4x4 &mat) const {
     return result;
 }
 
-// KLUCZOWA implementacja Mnożenia Macierz * Wektor
 Vector Matrix4x4::operator*(const Vector &v) const {
     Vector result;
-    // Traktujemy wektor v (x,y,z) jako (x,y,z,1) - czyli punkt w przestrzeni
     float w = 1.0f;
 
     result.x = entries[0] * v.x + entries[4] * v.y + entries[8]  * v.z + entries[12] * w;
@@ -155,7 +149,7 @@ void Matrix4x4::SetRotationX(const double angle) {
 
 // Implementacja dla rotacji wokół Z
 void Matrix4x4::SetRotationZ(const double angle) {
-    LoadIdentity(); // [cite: 423]
+    LoadIdentity();
     float rad = M_PI * angle / 180.0;
     entries[0] = (float)cos(rad);
     entries[1] = (float)sin(rad);
@@ -179,13 +173,11 @@ void Matrix4x4::SetScale(const Vector &scaleFactor) {
 void Matrix4x4::SetTransposed(const Matrix4x4 &m) {
    
 
-    // Kopiujemy diagonalę
-    entries[0] = m.entries[0];   // [cite: 343]
-    entries[5] = m.entries[5];   // [cite: 347] (dla 4x4)
-    entries[10] = m.entries[10]; // [cite: 351] (dla 4x4)
-    entries[15] = m.entries[15]; // (dla 4x4)
+    entries[0] = m.entries[0];
+    entries[5] = m.entries[5];
+    entries[10] = m.entries[10];
+    entries[15] = m.entries[15];
 
-    // Zamieniamy elementy
     entries[1] = m.entries[4];
     entries[4] = m.entries[1];
 
