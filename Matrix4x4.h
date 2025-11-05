@@ -26,6 +26,10 @@ public:
     // --- Metody pomocnicze ---
     void LoadIdentity();
 
+    void SetTransposed(const Matrix4x4& mat); //
+
+    Matrix4x4 GetTransposed() const; //
+
     // --- Operatory arytmetyczne ---
     bool operator==(const Matrix4x4& other) const;
     bool operator!=(const Matrix4x4& other) const;
