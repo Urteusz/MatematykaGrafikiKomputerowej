@@ -1,7 +1,3 @@
-//
-// Created by igork on 04.11.2025.
-//
-
 #include "Matrix4x4.h"
 
 #ifndef M_PI
@@ -26,7 +22,6 @@ Matrix4x4::Matrix4x4(float e0, float e1, float e2, float e3,
                      float e4, float e5, float e6, float e7,
                      float e8, float e9, float e10, float e11,
                      float e12, float e13, float e14, float e15) {
-    // Wypełnianie kolumnami
     entries[0] = e0; entries[1] = e1; entries[2] = e2; entries[3] = e3;
     entries[4] = e4; entries[5] = e5; entries[6] = e6; entries[7] = e7;
     entries[8] = e8; entries[9] = e9; entries[10] = e10; entries[11] = e11;
@@ -99,10 +94,8 @@ Matrix4x4 Matrix4x4::operator*(const Matrix4x4 &mat) const {
     return result;
 }
 
-// KLUCZOWA implementacja Mnożenia Macierz * Wektor
 Vector Matrix4x4::operator*(const Vector &v) const {
     Vector result;
-    // Traktujemy wektor v (x,y,z) jako (x,y,z,1) - czyli punkt w przestrzeni
     float w = 1.0f;
 
     result.x = entries[0] * v.x + entries[4] * v.y + entries[8]  * v.z + entries[12] * w;
@@ -119,7 +112,15 @@ Vector Matrix4x4::operator*(const Vector &v) const {
     return result;
 }
 
-// --- Metody transformacji ---
+// Implementacje dla rotacji wokół X
+void Matrix4x4::SetRotationX(const double angle) {
+    LoadIdentity();
+    float rad = M_PI * angle / 180.0;
+    entries[5] = (float)cos(rad);
+    entries[6] = (float)sin(rad);
+    entries[9] = -entries[6];
+    entries[10] = entries[5];
+}
 
 // Implementacja dla rotacji wokół Y
 void Matrix4x4::SetRotationY(const double angle) {
@@ -129,16 +130,6 @@ void Matrix4x4::SetRotationY(const double angle) {
     entries[2] = (float)sin(rad);
     entries[8] = -(float)sin(rad);
     entries[10] = (float)cos(rad);
-}
-
-// Implementacje dla rotacji wokół X
-void Matrix4x4::SetRotationX(const double angle) {
-    LoadIdentity(); // [cite: 411]
-    float rad = M_PI * angle / 180.0;
-    entries[5] = (float)cos(rad);
-    entries[6] = (float)sin(rad);
-    entries[9] = -entries[6];
-    entries[10] = entries[5];
 }
 
 // Implementacja dla rotacji wokół Z
@@ -151,7 +142,6 @@ void Matrix4x4::SetRotationZ(const double angle) {
     entries[5] = entries[0];
 }
 
-// Inne transformacje
 void Matrix4x4::SetTranslationPart(const Vector &translation) {
     entries[12] = translation.x;
     entries[13] = translation.y;
