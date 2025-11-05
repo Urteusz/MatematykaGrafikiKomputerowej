@@ -67,12 +67,15 @@ int main() {
         cout << "Implementacja dodawnaia nie jest przemienna" << endl;
     }
 
+    cout << endl;
+
     // Mnożenie przez skalar
     Matrix4x4 M_F = M_B * 3.0f;
     printMatrix("Test 3: Mnozenie B * 3.0 (powinny byc same 6)", M_F);
 
     cout << endl;
 
+    cout << "--- Test transpozycji macierzy ---" << endl;
     Matrix4x4 M_T(
             1, 2, 3, 4,
             5, 6, 7, 8,
@@ -96,8 +99,32 @@ int main() {
 
     cout << endl;
 
-    //Macierz odwrotna
+    // Macierz odwrotna
+    cout << "--- Test macierzy odwrotnej ---" << endl;
 
+    Matrix4x4 M_inv_test(
+            1, 2, 3, 0,
+            0, 1, 4, 0,
+            5, 6, 0, 0,
+            0, 0, 0, 1);
+
+    printMatrix("Macierz M", M_inv_test);
+
+    Matrix4x4 M_inv = M_inv_test.getInverseOfMatrix();
+    printMatrix("Macierz odwrotna M^-1", M_inv);
+
+    Matrix4x4 M_prod = M_inv_test * M_inv;
+    printMatrix("M * M^-1 (powinna byc jednostkowa)", M_prod);
+
+    Matrix4x4 I;
+    I.LoadIdentity();
+
+    if (M_prod == I)
+        cout << "Macierz odwrotna dziala poprawnie (M * M^-1 == I)" << endl;
+    else
+        cout << "Blad macierzy odwrotnej (M * M^-1 != I)" << endl;
+
+    cout << endl;
 
     // --- ZADANIE 3: Obrót wektora ---
     cout << "--- Zadanie 3: Obracanie wektora [1,0,0] o 90 stopni wokol osi Y ---" << endl;
@@ -110,7 +137,7 @@ int main() {
     printMatrix("Macierz obrotu RotY(90)", rotY);
 
     Vector v_rotated = rotY * v;
-]
+
     printVector("Wektor po obrocie", v_rotated);
     cout << endl;
 

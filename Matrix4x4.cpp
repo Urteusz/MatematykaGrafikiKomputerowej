@@ -204,28 +204,129 @@ Matrix4x4 Matrix4x4::GetTransposed() const {
 }
 
 void Matrix4x4::setMatrixAsInverseOfGivenMatrix(const Matrix4x4& m) {
-    float t1 = m.entries[0] * m.entries[0];
-    float t2 = m.entries[6] * m.entries[7];
-    float t3 = m.entries[3] * m.entries[1];
-    float t4 = m.entries[8] * m.entries[1];
-    float t5 = m.entries[9] * m.entries[2];
-    float t6 = m.entries[2] * m.entries[2];
-    float det = (t1 - m.entries[8] - t2) * m.entries[5] - t3 * m.entries[7] + t4 * m.entries[5] + t5 * m.entries[7] - t6 * m.entries[4];
-    if (det == 0.0) return;
-    float invd = 1.0f / det;
-    float m0 = (m.entries[4] * m.entries[8] - m.entries[7] * m.entries[5]) * invd;
-    float m3 = -(m.entries[3] * m.entries[8] - m.entries[6] * m.entries[5]) * invd;
-    float m6 = (m.entries[3] * m.entries[7] - m.entries[6] * m.entries[4]) * invd;
-    float m1 = -(m.entries[1] * m.entries[8] - m.entries[7] * m.entries[2]) * invd;
-    float m4 = (m.entries[0] * m.entries[8] - t2 - t4) * invd;
-    float m7 = -(t2 - t4) * invd;
-    float m2 = (m.entries[1] * m.entries[5] - m.entries[4] * m.entries[2]) * invd;
-    float m5 = -(m.entries[0] * m.entries[5] - t3 - t5) * invd;
-    float m8 = 0 - (t1 - t3) * invd;
-    entries[0] = m0; entries[3] = m3; entries[6] = m6;
-    entries[1] = m1; entries[4] = m4; entries[7] = m7;
-    entries[2] = m2; entries[5] = m5; entries[8] = m8;
+    const float* a = m.entries;
+    float inv[16];
+
+    inv[0] = a[5]  * a[10] * a[15] -
+             a[5]  * a[11] * a[14] -
+             a[9]  * a[6]  * a[15] +
+             a[9]  * a[7]  * a[14] +
+             a[13] * a[6]  * a[11] -
+             a[13] * a[7]  * a[10];
+
+    inv[4] = -a[4]  * a[10] * a[15] +
+             a[4]  * a[11] * a[14] +
+             a[8]  * a[6]  * a[15] -
+             a[8]  * a[7]  * a[14] -
+             a[12] * a[6]  * a[11] +
+             a[12] * a[7]  * a[10];
+
+    inv[8] = a[4]  * a[9] * a[15] -
+             a[4]  * a[11] * a[13] -
+             a[8]  * a[5] * a[15] +
+             a[8]  * a[7] * a[13] +
+             a[12] * a[5] * a[11] -
+             a[12] * a[7] * a[9];
+
+    inv[12] = -a[4]  * a[9] * a[14] +
+              a[4]  * a[10] * a[13] +
+              a[8]  * a[5] * a[14] -
+              a[8]  * a[6] * a[13] -
+              a[12] * a[5] * a[10] +
+              a[12] * a[6] * a[9];
+
+    inv[1] = -a[1]  * a[10] * a[15] +
+             a[1]  * a[11] * a[14] +
+             a[9]  * a[2] * a[15] -
+             a[9]  * a[3] * a[14] -
+             a[13] * a[2] * a[11] +
+             a[13] * a[3] * a[10];
+
+    inv[5] = a[0]  * a[10] * a[15] -
+             a[0]  * a[11] * a[14] -
+             a[8]  * a[2] * a[15] +
+             a[8]  * a[3] * a[14] +
+             a[12] * a[2] * a[11] -
+             a[12] * a[3] * a[10];
+
+    inv[9] = -a[0]  * a[9] * a[15] +
+             a[0]  * a[11] * a[13] +
+             a[8]  * a[1] * a[15] -
+             a[8]  * a[3] * a[13] -
+             a[12] * a[1] * a[11] +
+             a[12] * a[3] * a[9];
+
+    inv[13] = a[0]  * a[9] * a[14] -
+              a[0]  * a[10] * a[13] -
+              a[8]  * a[1] * a[14] +
+              a[8]  * a[2] * a[13] +
+              a[12] * a[1] * a[10] -
+              a[12] * a[2] * a[9];
+
+    inv[2] = a[1]  * a[6] * a[15] -
+             a[1]  * a[7] * a[14] -
+             a[5]  * a[2] * a[15] +
+             a[5]  * a[3] * a[14] +
+             a[13] * a[2] * a[7] -
+             a[13] * a[3] * a[6];
+
+    inv[6] = -a[0]  * a[6] * a[15] +
+             a[0]  * a[7] * a[14] +
+             a[4]  * a[2] * a[15] -
+             a[4]  * a[3] * a[14] -
+             a[12] * a[2] * a[7] +
+             a[12] * a[3] * a[6];
+
+    inv[10] = a[0]  * a[5] * a[15] -
+              a[0]  * a[7] * a[13] -
+              a[4]  * a[1] * a[15] +
+              a[4]  * a[3] * a[13] +
+              a[12] * a[1] * a[7] -
+              a[12] * a[3] * a[5];
+
+    inv[14] = -a[0]  * a[5] * a[14] +
+              a[0]  * a[6] * a[13] +
+              a[4]  * a[1] * a[14] -
+              a[4]  * a[2] * a[13] -
+              a[12] * a[1] * a[6] +
+              a[12] * a[2] * a[5];
+
+    inv[3] = -a[1] * a[6] * a[11] +
+             a[1] * a[7] * a[10] +
+             a[5] * a[2] * a[11] -
+             a[5] * a[3] * a[10] -
+             a[9] * a[2] * a[7] +
+             a[9] * a[3] * a[6];
+
+    inv[7] = a[0] * a[6] * a[11] -
+             a[0] * a[7] * a[10] -
+             a[4] * a[2] * a[11] +
+             a[4] * a[3] * a[10] +
+             a[8] * a[2] * a[7] -
+             a[8] * a[3] * a[6];
+
+    inv[11] = -a[0] * a[5] * a[11] +
+              a[0] * a[7] * a[9] +
+              a[4] * a[1] * a[11] -
+              a[4] * a[3] * a[9] -
+              a[8] * a[1] * a[7] +
+              a[8] * a[3] * a[5];
+
+    inv[15] = a[0] * a[5] * a[10] -
+              a[0] * a[6] * a[9] -
+              a[4] * a[1] * a[10] +
+              a[4] * a[2] * a[9] +
+              a[8] * a[1] * a[6] -
+              a[8] * a[2] * a[5];
+
+    float det = a[0] * inv[0] + a[1] * inv[4] + a[2] * inv[8] + a[3] * inv[12];
+    if (fabs(det) < 1e-6f) return;
+
+    det = 1.0f / det;
+    for (int i = 0; i < 16; i++)
+        entries[i] = inv[i] * det;
 }
+
 
 Matrix4x4 Matrix4x4::getInverseOfMatrix() const {
     Matrix4x4 result;
