@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <cmath>
 #include "Vector.h"
 #include "Matrix4x4.h"
@@ -171,56 +172,54 @@ int main() {
 
     cout << endl;
 
-    cout << endl << "=== TESTY KWATERNIONOW ===" << endl << endl;
+        ofstream output("QuaternionResults.txt");
+    if (!output.is_open()) {
+        std::cerr << "Nie można otworzyć pliku do zapisu!" << std::endl;
+        return 1;
+    }
 
-    // 1. Przygotowanie prostych obrotów
-    Quaternion qx_45 = createRotationX(45.0f);
-    Quaternion qy_45 = createRotationY(45.0f);
+    // --- Test konstruktora i podstawowych operacji ---
+    Quaternion q1(1, 2, 3, 4);
+    Quaternion q2(0.5, -1, 0, 2);
 
-    // 2. Mnozenie w dwóch kolejnosciach
-    Quaternion qxqy = qx_45 * qy_45;
-    Quaternion qyqx = qy_45 * qx_45;
+    output << "q1 = (" << q1.w << ", " << q1.x << ", " << q1.y << ", " << q1.z << ")\n";
+    output << "q2 = (" << q2.w << ", " << q2.x << ", " << q2.y << ", " << q2.z << ")\n";
 
-    cout << "--- Mnozenie kwaternionow ---" << endl;
-    cout << "qX * qY = [" << qxqy.w << ", " << qxqy.x << ", " << qxqy.y << ", " << qxqy.z << "]" << endl;
-    cout << "qY * qX = [" << qyqx.w << ", " << qyqx.x << ", " << qyqx.y << ", " << qyqx.z << "]" << endl;
+    Quaternion qAdd = q1 + q2;
+    output << "q1 + q2 = (" << qAdd.w << ", " << qAdd.x << ", " << qAdd.y << ", " << qAdd.z << ")\n";
 
-    cout << endl << "Wniosek: qX*qY i qY*qX sa rozne = mnozenie NIE jest przemienne." << endl << endl;
+    Quaternion qSub = q1 - q2;
+    output << "q1 - q2 = (" << qSub.w << ", " << qSub.x << ", " << qSub.y << ", " << qSub.z << ")\n";
 
+    Quaternion qMul = q1 * q2;
+    output << "q1 * q2 = (" << qMul.w << ", " << qMul.x << ", " << qMul.y << ", " << qMul.z << ")\n";
 
+    Quaternion qDiv = q1 / q2;
+    output << "q1 / q2 = (" << qDiv.w << ", " << qDiv.x << ", " << qDiv.y << ", " << qDiv.z << ")\n";
 
-    // 3. Sprawdzenie różnicy na przykładzie rotacji punktu
-    Vector testPoint(1, 0, 0);
-    Vector rot1 = qxqy.rotateVector(testPoint);
-    Vector rot2 = qyqx.rotateVector(testPoint);
+    output << "length(q1) = " << q1.length() << "\n";
+    output << "Inverse(q1) = (" << q1.getInverse().w << ", " << q1.getInverse().x << ", "
+           << q1.getInverse().y << ", " << q1.getInverse().z << ")\n";
 
-    cout << "--- Rotacja punktu (1,0,0) dwiema kolejnosciami obrotow ---" << endl;
-    printVector("Rotacja qX*qY", rot1);
-    printVector("Rotacja qY*qX", rot2);
+    // --- Test obrotu punktu [-1,-1,-1] o 270° wokół osi X ---
+    Vector point(-1, -1, -1);
+    Quaternion rot = Quaternion::fromAxisAngle(270, 1, 0, 0); // 270° wokół osi X
+    Vector rotated = rot.rotateVector(point);
+    output << "\nPunkt [-1,-1,-1] po obrocie 270° wokół osi X: ("
+           << rotated.x << ", " << rotated.y << ", " << rotated.z << ")\n";
 
-    if (rot1.x != rot2.x || rot1.y != rot2.y || rot1.z != rot2.z)
-        cout << "Potwierdzenie: wyniki rozne = brak przemiennosci." << endl;
-    else
-        cout << "Blad: wyniki identyczne (nie powinny byc)." << endl;
+    // --- Test nieprzemienności mnożenia kwaternionów ---
+    Quaternion qA = Quaternion::fromAxisAngle(90, 1, 0, 0);
+    Quaternion qB = Quaternion::fromAxisAngle(90, 0, 1, 0);
+    Quaternion qAB = qA * qB;
+    Quaternion qBA = qB * qA;
 
-    cout << endl;
+    output << "\nqA * qB = (" << qAB.w << ", " << qAB.x << ", " << qAB.y << ", " << qAB.z << ")\n";
+    output << "qB * qA = (" << qBA.w << ", " << qBA.x << ", " << qBA.y << ", " << qBA.z << ")\n";
+    output << "Widać, że qA*qB != qB*qA (brak przemienności)\n";
 
+    output.close();
 
-
-    // 4. Obrót punktu [-1,-1,-1] o 270° wokół osi X
-    cout << "--- Obrót punktu [-1,-1,-1] o 270° wokol osi X ---" << endl;
-
-    Quaternion qx_270 = createRotationX(270.0f);
-    qx_270.normalize();
-
-    Vector p(-1, -1, -1);
-    printVector("Punkt przed obrotem", p);
-
-    Vector p_rot = qx_270.rotateVector(p);
-    printVector("Punkt po obrocie", p_rot);
-
-    cout << "Oczekiwany wynik: [-1, 1, -1]" << endl;
-
-    cout << endl << "=== KONIEC TESTOW ===" << endl;
+    std::cout << "Testy zapisane w pliku QuaternionResults.txt" << std::endl;
     return 0;
 }
