@@ -2,6 +2,8 @@
 #include <cmath>
 #include "Vector.h"
 #include "Matrix4x4.h"
+#include "Quaternion.h"
+
 using namespace std;
 
 const float EPSILON = 0.0001f;
@@ -30,7 +32,41 @@ void printMatrix(const char* name, Matrix4x4 m) {
     cout << "--------------" << endl;
 }
 
+Quaternion createRotationX(float angleDegrees) {
+    float angleRad = angleDegrees * M_PI / 180.0f;
+    float halfAngle = angleRad / 2.0f;
 
+    return Quaternion(
+        cos(halfAngle),    // w
+        -sin(halfAngle),    // x (oś X)
+        0,                 // y
+        0                  // z
+    );
+}
+
+Quaternion createRotationY(float angleDegrees) {
+    float angleRad = angleDegrees * M_PI / 180.0f;
+    float halfAngle = angleRad / 2.0f;
+
+    return Quaternion(
+        cos(halfAngle),    // w
+        0,                 // x
+        sin(halfAngle),    // y (oś Y)
+        0                  // z
+    );
+}
+
+Quaternion createRotationZ(float angleDegrees) {
+    float angleRad = angleDegrees * M_PI / 180.0f;
+    float halfAngle = angleRad / 2.0f;
+
+    return Quaternion(
+        cos(halfAngle),    // w
+        0,                 // x
+        0,                 // y
+        sin(halfAngle)     // z (oś Z)
+    );
+}
 
 int main() {
 
@@ -171,5 +207,56 @@ int main() {
 
     cout << endl;
 
+    cout << endl << "=== TESTY KWATERNIONOW ===" << endl << endl;
+
+    // 1. Przygotowanie prostych obrotów
+    Quaternion qx_45 = createRotationX(45.0f);
+    Quaternion qy_45 = createRotationY(45.0f);
+
+    // 2. Mnozenie w dwóch kolejnosciach
+    Quaternion qxqy = qx_45 * qy_45;
+    Quaternion qyqx = qy_45 * qx_45;
+
+    cout << "--- Mnozenie kwaternionow ---" << endl;
+    cout << "qX * qY = [" << qxqy.w << ", " << qxqy.x << ", " << qxqy.y << ", " << qxqy.z << "]" << endl;
+    cout << "qY * qX = [" << qyqx.w << ", " << qyqx.x << ", " << qyqx.y << ", " << qyqx.z << "]" << endl;
+
+    cout << endl << "Wniosek: qX*qY i qY*qX sa rozne → mnozenie NIE jest przemienne." << endl << endl;
+
+
+
+    // 3. Sprawdzenie różnicy na przykładzie rotacji punktu
+    Vector testPoint(1, 0, 0);
+    Vector rot1 = qxqy.rotateVector(testPoint);
+    Vector rot2 = qyqx.rotateVector(testPoint);
+
+    cout << "--- Rotacja punktu (1,0,0) dwiema kolejnosciami obrotow ---" << endl;
+    printVector("Rotacja qX*qY", rot1);
+    printVector("Rotacja qY*qX", rot2);
+
+    if (rot1.x != rot2.x || rot1.y != rot2.y || rot1.z != rot2.z)
+        cout << "Potwierdzenie: wyniki różne → brak przemiennosci." << endl;
+    else
+        cout << "Blad: wyniki identyczne (nie powinny byc)." << endl;
+
+    cout << endl;
+
+
+
+    // 4. Obrót punktu [-1,-1,-1] o 270° wokół osi X
+    cout << "--- Obrót punktu [-1,-1,-1] o 270° wokol osi X ---" << endl;
+
+    Quaternion qx_270 = createRotationX(270.0f);
+    qx_270.normalize();
+
+    Vector p(-1, -1, -1);
+    printVector("Punkt przed obrotem", p);
+
+    Vector p_rot = qx_270.rotateVector(p);
+    printVector("Punkt po obrocie", p_rot);
+
+    cout << "Oczekiwany wynik: [-1, 1, -1]" << endl;
+
+    cout << endl << "=== KONIEC TESTOW ===" << endl;
     return 0;
 }

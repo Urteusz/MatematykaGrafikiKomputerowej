@@ -1,7 +1,3 @@
-//
-// Created by Urteusz on 22.10.2025.
-//
-
 #include "Vector.h"
 
 using namespace std;

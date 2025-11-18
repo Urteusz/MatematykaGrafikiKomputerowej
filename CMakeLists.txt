@@ -22,7 +22,9 @@ add_executable(${PROJECT_NAME} main.cpp
         Vector.cpp
         Vector.h
         Matrix4x4.h
-        Matrix4x4.cpp)
+        Matrix4x4.cpp
+        Quaternion.cpp
+        Quaternion.cpp)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw glad)
 

@@ -203,6 +203,15 @@ Matrix4x4 Matrix4x4::GetTransposed() const {
     return result;
 }
 
+//
+// Dla każdego `inv[i]`:
+//
+// 1. Określ pozycję w macierzy 4×4
+// 2. Oblicz znak** według szachownicy: `(-1)^(wiersz+kolumna)`
+// 3. Usuń odpowiedni wiersz i kolumnę → dostaniesz macierz 3×3
+// 4. Oblicz wyznacznik 3×3 wzorem Sarrusa
+// 5. Pomnóż przez znak
+
 void Matrix4x4::setMatrixAsInverseOfGivenMatrix(const Matrix4x4& m) {
     const float* a = m.entries;
     float inv[16];
