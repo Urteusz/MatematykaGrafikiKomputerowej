@@ -18,6 +18,9 @@ public:
     Quaternion operator+(const Quaternion& q) const;
     Quaternion operator-(const Quaternion& q) const;
     Quaternion operator*(const Quaternion& q) const;
+
+    Quaternion operator/(const Quaternion &q) const;
+
     Quaternion operator*(float scalar) const;
 
     float length() const;
@@ -25,8 +28,8 @@ public:
     Quaternion getConjugate() const;
     Quaternion getInverse() const;
 
-    // Rotacja wektora
     Vector rotateVector(const Vector& v) const;
+    static Quaternion fromAxisAngle(float angleDegrees, float axisX, float axisY, float axisZ);
 };
 
 #endif QUATERNION_H

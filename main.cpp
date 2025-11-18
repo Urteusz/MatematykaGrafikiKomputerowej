@@ -32,42 +32,6 @@ void printMatrix(const char* name, Matrix4x4 m) {
     cout << "--------------" << endl;
 }
 
-Quaternion createRotationX(float angleDegrees) {
-    float angleRad = angleDegrees * M_PI / 180.0f;
-    float halfAngle = angleRad / 2.0f;
-
-    return Quaternion(
-        cos(halfAngle),    // w
-        -sin(halfAngle),    // x (oś X)
-        0,                 // y
-        0                  // z
-    );
-}
-
-Quaternion createRotationY(float angleDegrees) {
-    float angleRad = angleDegrees * M_PI / 180.0f;
-    float halfAngle = angleRad / 2.0f;
-
-    return Quaternion(
-        cos(halfAngle),    // w
-        0,                 // x
-        sin(halfAngle),    // y (oś Y)
-        0                  // z
-    );
-}
-
-Quaternion createRotationZ(float angleDegrees) {
-    float angleRad = angleDegrees * M_PI / 180.0f;
-    float halfAngle = angleRad / 2.0f;
-
-    return Quaternion(
-        cos(halfAngle),    // w
-        0,                 // x
-        0,                 // y
-        sin(halfAngle)     // z (oś Z)
-    );
-}
-
 int main() {
 
     // Test 1: LoadIdentity()
@@ -221,7 +185,7 @@ int main() {
     cout << "qX * qY = [" << qxqy.w << ", " << qxqy.x << ", " << qxqy.y << ", " << qxqy.z << "]" << endl;
     cout << "qY * qX = [" << qyqx.w << ", " << qyqx.x << ", " << qyqx.y << ", " << qyqx.z << "]" << endl;
 
-    cout << endl << "Wniosek: qX*qY i qY*qX sa rozne → mnozenie NIE jest przemienne." << endl << endl;
+    cout << endl << "Wniosek: qX*qY i qY*qX sa rozne = mnozenie NIE jest przemienne." << endl << endl;
 
 
 
@@ -235,7 +199,7 @@ int main() {
     printVector("Rotacja qY*qX", rot2);
 
     if (rot1.x != rot2.x || rot1.y != rot2.y || rot1.z != rot2.z)
-        cout << "Potwierdzenie: wyniki różne → brak przemiennosci." << endl;
+        cout << "Potwierdzenie: wyniki rozne = brak przemiennosci." << endl;
     else
         cout << "Blad: wyniki identyczne (nie powinny byc)." << endl;
 
