@@ -40,8 +40,8 @@ bool znajdzPrzeciecieProstych(Prosta& prostaA, Prosta& prostaB, Vector& punktPrz
     Vector dp = prostaB.punkt - prostaA.punkt;
 
     // Używamy dwóch pierwszych równań (dla x i y) do znalezienia t i s.
-    // t*vA.x - s*vB.x = dp.x
-    // t*vA.y - s*vB.y = dp.y
+    // t*vA.x-s*vB.x = dp.x
+    // t*vA.y-s*vB.y = dp.y
     float det = prostaB.kierunek.x * prostaA.kierunek.y - prostaB.kierunek.y * prostaA.kierunek.x;
 
     // Jeśli wyznacznik jest bliski zeru, oznacza to, że projekcje wektorów na płaszczyznę XY są równoległe.
