@@ -233,3 +233,39 @@ bool znajdzPrzeciecieOdcinkow(Vector& a1, Vector& a2, Vector& b1, Vector& b2, Ve
     // Jeśli oba testy przeszły, odcinki się przecinają.
     return true;
 }
+
+int znajdzPrzeciecieProstejZeSfera(Prosta& prosta, Sfera& sfera, std::vector<Vector>& punktyPrzeciecia) {
+    // Wektor od środka sfery do punktu początkowego prostej
+    Vector oc = prosta.punkt - sfera.srodek;
+
+    // Współczynniki równania kwadratowego at² + bt + c = 0
+    float a = prosta.kierunek.dotProduct(prosta.kierunek);
+    float b = 2.0f * oc.dotProduct(prosta.kierunek);
+    float c = oc.dotProduct(oc) - sfera.promien * sfera.promien;
+
+    // Obliczanie delty
+    float delta = b * b - 4.0f * a * c;
+
+    punktyPrzeciecia.clear(); // Czyścimy wektor wyjściowy
+
+    if (delta < 0) {
+        // Brak rozwiązań rzeczywistych, brak przecięć
+        return 0;
+    }
+    else if (abs(delta) < 0.0001f) {
+        // Jedno rozwiązanie (prosta jest styczna)
+        float t = -b / (2.0f * a);
+        punktyPrzeciecia.push_back(prosta.punkt + prosta.kierunek * t);
+        return 1;
+    }
+    else {
+        // Dwa rozwiązania (prosta przecina sferę)
+        float sqrt_delta = sqrt(delta);
+        float t1 = (-b + sqrt_delta) / (2.0f * a);
+        float t2 = (-b - sqrt_delta) / (2.0f * a);
+
+        punktyPrzeciecia.push_back(prosta.punkt + prosta.kierunek * t1);
+        punktyPrzeciecia.push_back(prosta.punkt + prosta.kierunek * t2);
+        return 2;
+    }
+}
