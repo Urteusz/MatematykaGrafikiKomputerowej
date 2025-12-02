@@ -54,6 +54,7 @@ public:
     void SetRotationY(const double angle);
     void SetRotationZ(const double angle);
 
+    void test() const;
 };
 
 
