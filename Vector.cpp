@@ -8,6 +8,18 @@ void Vector::operator+=(const Vector &v) {
     z+=v.z;
 }
 
+Vector Vector::operator+(const Vector& v) const {
+    return Vector(x + v.x, y + v.y, z + v.z);
+}
+
+Vector Vector::operator-(const Vector& v) const {
+    return Vector(x - v.x, y - v.y, z - v.z);
+}
+
+Vector Vector::operator*(float scalar) const {
+    return Vector(x * scalar, y * scalar, z * scalar);
+}
+
 void Vector::add(Vector v) {
     this->x += v.x;
     this->y += v.y;

@@ -1,9 +1,9 @@
-
-
-#ifndef QUATERNION_H
-#define UATERNION_H
 #include "Vector.h"
 #include <fstream>
+
+#ifndef QUATERNION_H
+#define QUATERNION_H
+
 
 class Quaternion {
 public:
@@ -34,4 +34,4 @@ public:
     void test();
 };
 
-#endif QUATERNION_H
+#endif // QUATERNION_H
