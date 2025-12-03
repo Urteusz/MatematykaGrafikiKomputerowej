@@ -32,14 +32,10 @@ bool znajdzPrzeciecieProstych(Prosta& prostaA, Prosta& prostaB, Vector& punktPrz
         return false;
     }
 
-    // Rozwiązujemy układ równań dla parametrów t i s:
-    // P_A + t * V_A = P_B + s * V_B
-    // t * V_A - s * V_B = P_B - P_A
+    // Rozwiązujemy układ równań dla parametrów t i s
     Vector dp = prostaB.punkt - prostaA.punkt;
 
     // Używamy dwóch pierwszych równań (dla x i y) do znalezienia t i s.
-    // t*vA.x-s*vB.x = dp.x
-    // t*vA.y-s*vB.y = dp.y
     float det = prostaB.kierunek.x * prostaA.kierunek.y - prostaB.kierunek.y * prostaA.kierunek.x;
 
     // Jeśli wyznacznik jest bliski zeru, oznacza to, że projekcje wektorów na płaszczyznę XY są równoległe.
@@ -90,7 +86,6 @@ float znajdzKatMiedzyProstymi(Prosta& prostaA, Prosta& prostaB) {
     Vector vA = prostaA.kierunek;
     Vector vB = prostaB.kierunek;
 
-    // Oblicz długości obu wektorów.
     float dlugosc_vA = vA.length();
     float dlugosc_vB = vB.length();
 
@@ -99,10 +94,9 @@ float znajdzKatMiedzyProstymi(Prosta& prostaA, Prosta& prostaB) {
         return 0.0f;
     }
 
-    // Obliczamy iloczyn skalarny wektorów kierunkowych.
     float iloczynSkalarny = vA.dotProduct(vB);
 
-    // Oblicz cosinus kąta. Używamy abs, bo jest to kąt ostry (0-90°) z definicji.
+    // Używamy abs, bo jest to kąt ostry (0-90°) z definicji.
     float cosinusKata = abs(iloczynSkalarny) / (dlugosc_vA * dlugosc_vB);
 
     // Oblicz kąt w radianach używając arcus cosinus.
@@ -114,10 +108,9 @@ float znajdzKatMiedzyProstymi(Prosta& prostaA, Prosta& prostaB) {
 
 bool znajdzPrzeciecieProstejZPlaszczyzna(Prosta& prosta, Plaszczyzna& plaszczyzna, Vector& punktPrzeciecia) {
 
-    // Iloczyn skalarny wektora kierunkowego prostej (V) i wektora normalnego płaszczyzny (N)
     float dotNV = plaszczyzna.normal.dotProduct(prosta.kierunek);
 
-    // Jeśli iloczyn skalarny jest bliski zeru, to prosta jest równoległa do płaszczyzny.
+    // Prosta jest równoległa do płaszczyzny.
     if (abs(dotNV) < EPSILON) {
         return false;
     }
@@ -145,7 +138,6 @@ float znajdzKatMiedzyProstaAPlaszczyzna(Prosta& prosta, Plaszczyzna& plaszczyzna
     // sin(alfa) = |N • V| / (||N|| * ||V||)
     float sinAlfa = abs(dotNV) / (lenV * lenN);
 
-    // Kąt w radianach to arcus sinus
     float katRad = asin(sinAlfa);
     return katRad * 180.0f / M_PI;
 }
@@ -169,7 +161,6 @@ bool znajdzProstaPrzecieciaPlaszczyzn(Plaszczyzna& pA, Plaszczyzna& pB, Prosta& 
     float det = pA.normal.x * pB.normal.y - pB.normal.x * pA.normal.y;
 
     if (abs(det) < EPSILON) {
-        // To założenie nie zadziałało (prosta jest równoległa do płaszczyzny XY).
         return false;
     }
 
@@ -200,11 +191,10 @@ bool znajdzPrzeciecieOdcinkow(Vector& a1, Vector& a2, Vector& b1, Vector& b2, Ve
 
     // Sprawdź, czy nieskończone proste w ogóle się przecinają.
     if (!znajdzPrzeciecieProstych(prostaA, prostaB, punktPrzeciecia)) {
-        return false; // Proste są równoległe lub skośne, więc odcinki się nie przetną.
+        return false;
     }
 
     // Sprawdź, czy punkt przecięcia leży na odcinku A.
-    // Punkt P leży na odcinku A1-A2, jeśli wektor A1->P jest krótszy niż A1->A2 i ma ten sam kierunek.
     float t;
     Vector vA = a2 - a1;
     if (abs(vA.x) > EPSILON) t = (punktPrzeciecia.x - a1.x) / vA.x;
