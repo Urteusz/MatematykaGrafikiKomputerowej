@@ -19,6 +19,9 @@ public:
     ~Vector();
 
     void operator+=(const Vector& v);
+    Vector operator+(const Vector& v) const;
+    Vector operator-(const Vector& v) const;
+    Vector operator*(float scalar) const;
     void add(Vector v);
     void sub(Vector v);
     void div(float f);

@@ -57,3 +57,54 @@ Quaternion Quaternion::fromAxisAngle(float angleDegrees, float axisX, float axis
 
     return Quaternion(cosHalf, axisX * k, axisY * k, axisZ * k);
 }
+
+void Quaternion::test() {
+    std::ofstream output("QuaternionResults.txt");
+    if (!output.is_open()) {
+        std::cerr << "Nie można otworzyć pliku do zapisu!" << std::endl;
+    }
+
+    // --- Test konstruktora i podstawowych operacji ---
+    Quaternion q1(1, 2, 3, 4);
+    Quaternion q2(0.5, -1, 0, 2);
+
+    output << "q1 = (" << q1.w << ", " << q1.x << ", " << q1.y << ", " << q1.z << ")\n";
+    output << "q2 = (" << q2.w << ", " << q2.x << ", " << q2.y << ", " << q2.z << ")\n";
+
+    Quaternion qAdd = q1 + q2;
+    output << "q1 + q2 = (" << qAdd.w << ", " << qAdd.x << ", " << qAdd.y << ", " << qAdd.z << ")\n";
+
+    Quaternion qSub = q1 - q2;
+    output << "q1 - q2 = (" << qSub.w << ", " << qSub.x << ", " << qSub.y << ", " << qSub.z << ")\n";
+
+    Quaternion qMul = q1 * q2;
+    output << "q1 * q2 = (" << qMul.w << ", " << qMul.x << ", " << qMul.y << ", " << qMul.z << ")\n";
+
+    Quaternion qDiv = q1 / q2;
+    output << "q1 / q2 = (" << qDiv.w << ", " << qDiv.x << ", " << qDiv.y << ", " << qDiv.z << ")\n";
+
+    output << "length(q1) = " << q1.length() << "\n";
+    output << "Inverse(q1) = (" << q1.getInverse().w << ", " << q1.getInverse().x << ", "
+           << q1.getInverse().y << ", " << q1.getInverse().z << ")\n";
+
+    // --- Test obrotu punktu [-1,-1,-1] o 270° wokół osi X ---
+    Vector point(-1, -1, -1);
+    Quaternion rot = Quaternion::fromAxisAngle(270, 1, 0, 0); // 270° wokół osi X
+    Vector rotated = rot.rotateVector(point);
+    output << "\nPunkt [-1,-1,-1] po obrocie 270° wokół osi X: ("
+           << rotated.x << ", " << rotated.y << ", " << rotated.z << ")\n";
+
+    // --- Test nieprzemienności mnożenia kwaternionów ---
+    Quaternion qA = Quaternion::fromAxisAngle(90, 1, 0, 0);
+    Quaternion qB = Quaternion::fromAxisAngle(90, 0, 1, 0);
+    Quaternion qAB = qA * qB;
+    Quaternion qBA = qB * qA;
+
+    output << "\nqA * qB = (" << qAB.w << ", " << qAB.x << ", " << qAB.y << ", " << qAB.z << ")\n";
+    output << "qB * qA = (" << qBA.w << ", " << qBA.x << ", " << qBA.y << ", " << qBA.z << ")\n";
+    output << "Widać, że qA*qB != qB*qA (brak przemienności)\n";
+
+    output.close();
+
+    std::cout << "Testy zapisane w pliku " << "QuaternionResults.txt" << std::endl;
+}

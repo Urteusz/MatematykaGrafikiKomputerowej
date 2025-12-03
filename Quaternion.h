@@ -1,8 +1,9 @@
-
+#include "Vector.h"
+#include <fstream>
 
 #ifndef QUATERNION_H
-#define UATERNION_H
-#include "Vector.h"
+#define QUATERNION_H
+
 
 class Quaternion {
 public:
@@ -30,6 +31,7 @@ public:
 
     Vector rotateVector(const Vector& v) const;
     static Quaternion fromAxisAngle(float angleDegrees, float axisX, float axisY, float axisZ);
+    void test();
 };
 
-#endif QUATERNION_H
+#endif // QUATERNION_H
