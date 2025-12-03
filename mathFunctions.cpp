@@ -9,12 +9,10 @@ float ClearZero(float val){
     return val;
 }
 
-// Mała funkcja pomocnicza do ładnego drukowania wektorów
 void printVector(const char* name, Vector v) {
     cout << name << " = [" << ClearZero(v.x) << ", " << ClearZero(v.y) << ", " << ClearZero(v.z) << "]" << endl;
 }
 
-// Mała funkcja pomocnicza do ładnego drukowania macierzy (kolumnowo)
 void printMatrix(const char* name, Matrix4x4 m) {
     cout << "--- " << name << " ---" << endl;
     for(int row = 0; row < 4; ++row) {
@@ -28,7 +26,7 @@ void printMatrix(const char* name, Matrix4x4 m) {
 
 bool znajdzPrzeciecieProstych(Prosta& prostaA, Prosta& prostaB, Vector& punktPrzeciecia) {
 
-    // Sprawdzenie, czy proste są równoległe.
+    // Iloczyn wektorow kierunkowych = 0, to są równoległe
     Vector cross = prostaA.kierunek.cross(prostaB.kierunek);
     if (cross.length() < EPSILON) {
         return false;
@@ -96,7 +94,7 @@ float znajdzKatMiedzyProstymi(Prosta& prostaA, Prosta& prostaB) {
     float dlugosc_vA = vA.length();
     float dlugosc_vB = vB.length();
 
-    // Jeśli któryś wektor ma długość 0, kąt jest niezdefiniowany. Zwracamy 0, aby uniknąć dzielenia przez zero.
+    // Jeśli któryś wektor ma długość 0, kąt jest niezdefiniowany.
     if (dlugosc_vA < EPSILON || dlugosc_vB < EPSILON) {
         return 0.0f;
     }
@@ -206,9 +204,7 @@ bool znajdzPrzeciecieOdcinkow(Vector& a1, Vector& a2, Vector& b1, Vector& b2, Ve
     }
 
     // Sprawdź, czy punkt przecięcia leży na odcinku A.
-    // Punkt P leży na odcinku A1-A2, jeśli wektor A1->P jest krótszy
-    // niż A1->A2 i ma ten sam kierunek.
-    // Prostszy test: czy t z równania P = A1 + t*(A2-A1) jest w zakresie [0, 1].
+    // Punkt P leży na odcinku A1-A2, jeśli wektor A1->P jest krótszy niż A1->A2 i ma ten sam kierunek.
     float t;
     Vector vA = a2 - a1;
     if (abs(vA.x) > EPSILON) t = (punktPrzeciecia.x - a1.x) / vA.x;
@@ -246,7 +242,7 @@ int znajdzPrzeciecieProstejZeSfera(Prosta& prosta, Sfera& sfera, std::vector<Vec
     // Obliczanie delty
     float delta = b * b - 4.0f * a * c;
 
-    punktyPrzeciecia.clear(); // Czyścimy wektor wyjściowy
+    punktyPrzeciecia.clear();
 
     if (delta < 0) {
         // Brak rozwiązań rzeczywistych, brak przecięć
