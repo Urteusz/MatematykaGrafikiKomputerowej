@@ -32,18 +32,38 @@ bool znajdzPrzeciecieProstych(Prosta& prostaA, Prosta& prostaB, Vector& punktPrz
         return false;
     }
 
-    // Rozwiązujemy układ równań dla parametrów t i s
     Vector dp = prostaB.punkt - prostaA.punkt;
 
-    // Używamy dwóch pierwszych równań (dla x i y) do znalezienia t i s.
-    float det = prostaB.kierunek.x * prostaA.kierunek.y - prostaB.kierunek.y * prostaA.kierunek.x;
+    float t = 0.0f;
+    bool znalezionoT = false;
 
-    // Jeśli wyznacznik jest bliski zeru, oznacza to, że projekcje wektorów na płaszczyznę XY są równoległe.
-    if (abs(det) < EPSILON) {
+    // Próbujemy płaszczyznę XY
+    float det_xy = prostaB.kierunek.x * prostaA.kierunek.y - prostaB.kierunek.y * prostaA.kierunek.x;
+    if (abs(det_xy) > EPSILON) {
+        t = (prostaB.kierunek.x * dp.y - prostaB.kierunek.y * dp.x) / det_xy;
+        znalezionoT = true;
+    }
+        // Próbujemy płaszczyznę XZ
+    else {
+        float det_xz = prostaB.kierunek.x * prostaA.kierunek.z - prostaB.kierunek.z * prostaA.kierunek.x;
+        if (abs(det_xz) > EPSILON) {
+            t = (prostaB.kierunek.x * dp.z - prostaB.kierunek.z * dp.x) / det_xz;
+            znalezionoT = true;
+        }
+            // Próbujemy płaszczyznę YZ
+        else {
+            float det_yz = prostaB.kierunek.y * prostaA.kierunek.z - prostaB.kierunek.z * prostaA.kierunek.y;
+            if (abs(det_yz) > EPSILON) {
+                t = (prostaB.kierunek.y * dp.z - prostaB.kierunek.z * dp.y) / det_yz;
+                znalezionoT = true;
+            }
+        }
+    }
+
+    if (!znalezionoT) {
         return false;
     }
 
-    float t = (prostaB.kierunek.x * dp.y - prostaB.kierunek.y * dp.x) / det;
     
     // Najpierw obliczamy punkt na prostej A
     Vector p1 = prostaA.punkt + prostaA.kierunek * t;
