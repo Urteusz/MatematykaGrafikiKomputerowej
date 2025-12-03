@@ -139,7 +139,7 @@ void Matrix4x4::SetRotationY(const double angle) {
 
 // Implementacje dla rotacji wokół X
 void Matrix4x4::SetRotationX(const double angle) {
-    LoadIdentity(); // [cite: 411]
+    LoadIdentity();
     float rad = M_PI * angle / 180.0;
     entries[5] = (float)cos(rad);
     entries[6] = (float)sin(rad);
@@ -203,14 +203,6 @@ Matrix4x4 Matrix4x4::GetTransposed() const {
     return result;
 }
 
-//
-// Dla każdego `inv[i]`:
-//
-// 1. Określ pozycję w macierzy 4×4
-// 2. Oblicz znak** według szachownicy: `(-1)^(wiersz+kolumna)`
-// 3. Usuń odpowiedni wiersz i kolumnę → dostaniesz macierz 3×3
-// 4. Oblicz wyznacznik 3×3 wzorem Sarrusa
-// 5. Pomnóż przez znak
 
 void Matrix4x4::setMatrixAsInverseOfGivenMatrix(const Matrix4x4& m) {
     const float* a = m.entries;

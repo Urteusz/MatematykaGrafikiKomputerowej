@@ -28,17 +28,6 @@ Quaternion Quaternion::operator/(const Quaternion& q) const {
     return (*this) * q.getInverse();
 }
 
-float Quaternion::length() const {
-    return sqrt(w*w + x*x + y*y + z*z);
-}
-
-void Quaternion::normalize() {
-    float len = length();
-    if (len > 0.0f) {
-        w /= len; x /= len; y /= len; z /= len;
-    }
-}
-
 Quaternion Quaternion::getInverse() const {
     float lenSq = w*w + x*x + y*y + z*z;
     if (lenSq > 0.0f) {
