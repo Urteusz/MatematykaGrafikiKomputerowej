@@ -83,7 +83,6 @@ void Quaternion::test() {
     Quaternion qDiv = q1 / q2;
     output << "q1 / q2 = (" << qDiv.w << ", " << qDiv.x << ", " << qDiv.y << ", " << qDiv.z << ")\n";
 
-    output << "length(q1) = " << q1.length() << "\n";
     output << "Inverse(q1) = (" << q1.getInverse().w << ", " << q1.getInverse().x << ", "
            << q1.getInverse().y << ", " << q1.getInverse().z << ")\n";
 
