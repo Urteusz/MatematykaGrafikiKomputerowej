@@ -4,11 +4,14 @@ project(OpenGLExample)
 set(CMAKE_CXX_STANDARD 17)
 
 include(FetchContent)
+
 FetchContent_Declare(
         glfw
         GIT_REPOSITORY https://github.com/glfw/glfw.git
         GIT_TAG latest
 )
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+
 FetchContent_MakeAvailable(glfw)
 
 FetchContent_Declare(
@@ -24,7 +27,9 @@ add_executable(${PROJECT_NAME} main.cpp
         Matrix4x4.h
         Matrix4x4.cpp
         Quaternion.cpp
-        Quaternion.cpp)
+        Quaternion.cpp
+        cube_raytracer.cpp
+        cube_raytracer.cpp)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw glad)
 

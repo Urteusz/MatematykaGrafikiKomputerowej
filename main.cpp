@@ -7,6 +7,8 @@
 
 using namespace std;
 
+void renderCubeRaytracer();
+
 int main()
 {
     Vector punktPrzeciecia;
@@ -104,5 +106,12 @@ int main()
             printVector(nazwa.c_str(), punkty[i]);
         }
     }
+
+    cout << "\n\n========================================" << endl;
+    cout << "Uruchamianie Ray Tracera Szescianu..." << endl;
+    cout << "========================================\n" << endl;
+
+    renderCubeRaytracer();
+
     return 0;
 }
